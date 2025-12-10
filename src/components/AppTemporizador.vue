@@ -25,6 +25,7 @@ export default defineComponent({
     components: {
         AppCronometro,
     },
+    emits: ["aoTemporizadorFinalizado"],
     data() {
         return {
             tempoEmSegundos: 0,
@@ -42,6 +43,7 @@ export default defineComponent({
         finalizar() { 
             if (this.cronometro) {
             clearInterval(this.cronometro)
+            this.$emit("aoTemporizadorFinalizado", this.tempoEmSegundos);
             this.cronometro = null;
             this.tempoEmSegundos = 0;
             this.cronometroRodando = false;
