@@ -7,10 +7,11 @@
             <div class="column">
                 <AppTemporizador @aoTemporizadorFinalizado="finalizarTarefa"/>
             </div>
+        </div>
+        <div>
+
         </div>    
-        <div v-for="tarefa in tarefas" :key="tarefa.descricao">
-                <p>{{ tarefa.descricao }} - {{ tarefa.tempo }} segundos</p>
-        </div>        
+               
     </div>
 </template>
 
@@ -24,20 +25,19 @@ export default defineComponent({
     components: {
         AppTemporizador
     },
+    emits: ['aoAdicionarTarefa'],
     data() {
         return {
             descricao: '',
-            tarefas: [] as Array<{ descricao: string; tempo: number }>,
         };
     },
     methods: {
         finalizarTarefa(tempoDecorrido: number) {
-            this.tarefas.push({
+            this.$emit('aoAdicionarTarefa', {
                 descricao: this.descricao,
                 tempo: tempoDecorrido
             });
             this.descricao = '';
-            
         }
     }
 });

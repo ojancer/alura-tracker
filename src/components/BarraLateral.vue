@@ -17,7 +17,7 @@ export default defineComponent({
 <style scoped> 
     header {
         padding: 1rem;
-        background: #0d3b66;
+        background: #414141;
         width: 100%;
         height: 100vh;
         }
@@ -28,7 +28,7 @@ export default defineComponent({
     }
     }
     h1 {
-        color: #faf0ca;
+        color: #d9d9d9;
         font-size: 2rem;
         display: flex;
         align-items: center;
