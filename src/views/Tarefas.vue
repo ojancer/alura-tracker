@@ -1,34 +1,46 @@
 <template>
     <div class="column is-three-quarter">
       <TaskForm  @aoAdicionarTarefa="adicionarTarefa"/>
-      <div class="lista">
-        <AppList v-for="(tarefa, index) in tarefas" :key="index" :tarefa="tarefa"/>
-      </div>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr>
+            <th>Nome da Tarefa</th>
+            <th>Projeto</th>
+            <th>Tempo Decorrido</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(tarefa, index) in tarefas" :key="index">
+            <td>{{ tarefa.descricao }}</td>
+            <td>{{ tarefa.projetoNome }}</td>
+            <td>{{ tarefa.tempo }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import TaskForm from '../components/TaskForm.vue';
-import AppList from '../components/AppList.vue';
-import IAppList from '../interfaces/IAppList';
+import { useTarefasStore } from '@/stores/tarefas';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
   name: 'App',
   components: {
     TaskForm,
-    AppList
   },
-  data() {
-    return {
-      tarefas: [] as IAppList[]
-    };
+  setup() {
+    const tarefasStore = useTarefasStore();
+    const { tarefas } = storeToRefs(tarefasStore);
+    return { tarefas };
   },
   methods: {
-    adicionarTarefa(tarefa: IAppList) {
-      this.tarefas.push(tarefa);
+    adicionarTarefa() {
+      // Não faz mais nada, pois a store já adiciona
     }
-  }   
+  }
 });
 
 </script>

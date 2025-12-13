@@ -1,119 +1,66 @@
 <template>
-    <div class="projetos">
-        <div class="projetos-header">
-            <h1>Projetos</h1>
-            <button @click="abrirFormulario" class="btn-novo">
-                Novo Projeto
-            </button>
-        </div>
+    <section class="projetos">
+        <H1 class="title">Projetos</H1>
+        <form @submit.prevent="adicionarProjeto">
+            <div class="field">
+                <label for="nomeProjeto">Nome do Projeto:</label>
+                <input type="text" class="input" id="nomeProjeto" v-model="nomeProjeto" />
+            </div>
+            <div class="field">
+                <button type="submit" class="button">Adicionar Projeto</button>
+            </div>
+        </form>
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome do Projeto</th>
+                    <th>Data de Criação</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="projeto in projetos" :key="projeto.id">
+                    <td>{{ projeto.id }}</td>
+                    <td>{{ projeto.nome }}</td>
+                    <td>{{ projeto.dataCriacao.toLocaleString() }}</td>
+                </tr>
+            </tbody>
 
-        <div class="projetos-lista">
-            <div v-if="projetos.length === 0" class="vazio">
-                <p>Nenhum projeto encontrado</p>
-            </div>
-            
-            <div v-else class="grid">
-                <div 
-                    v-for="projeto in projetos" 
-                    :key="projeto.id"
-                    class="projeto-card"
-                >
-                    <h3>{{ projeto.nome }}</h3>
-                    <p>{{ projeto.descricao }}</p>
-                    <div class="acoes">
-                        <button @click="editar(projeto.id)" class="btn-editar">
-                            Editar
-                        </button>
-                        <button @click="deletar(projeto.id)" class="btn-deletar">
-                            Deletar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        </table>
+    </section>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { useProjetosStore } from '@/stores/projetos';
+import { storeToRefs } from 'pinia';
+
+export default defineComponent({
     name: 'Projetos',
     data() {
         return {
-            projetos: []
-        }
+            nomeProjeto: ''
+        };
+    },
+    setup() {
+        const projetosStore = useProjetosStore();
+        const { projetos } = storeToRefs(projetosStore);
+        return { projetos, projetosStore };
     },
     methods: {
-        abrirFormulario() {
-            // Implementar abertura do formulário
-        },
-        editar(id) {
-            // Implementar edição
-        },
-        deletar(id) {
-            // Implementar deleção
+        adicionarProjeto() {
+            if (this.nomeProjeto.trim()) {
+                this.projetosStore.adicionarProjeto(this.nomeProjeto.trim());
+                this.nomeProjeto = '';
+            }
         }
-    },
-    mounted() {
-        // Carregar projetos
     }
-}
+});
 </script>
 
 <style scoped>
 .projetos {
-    padding: 20px;
-}
-
-.projetos-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-}
-
-.projeto-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.acoes {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.btn-novo, .btn-editar, .btn-deletar {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.btn-novo {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-editar {
-    background-color: #007bff;
-    color: white;
-}
-
-.btn-deletar {
-    background-color: #dc3545;
-    color: white;
-}
-
-.vazio {
-    text-align: center;
-    padding: 40px;
+    margin: 0 auto;
+    padding: 1rem;
 }
 </style>
