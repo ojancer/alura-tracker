@@ -17,7 +17,6 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import AppCronometro from './AppCronometro.vue';
 import AppTemporizador from './AppTemporizador.vue';
 
 export default defineComponent({
